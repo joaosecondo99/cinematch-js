@@ -60,11 +60,12 @@ function coletarPerfil() {
 // ===================== RF02 — Catálogo de conteúdos =====================
 
 const catalogo = [
-  new Serie(1, "Fronteira Digital", ["Ação", "Ficção Científica"], 45, 2),
-  new Filme(2, "Risadas de Sábado", ["Comédia", "Romance"], 98),
-  new Filme(3, "Sombras do Porão", ["Terror", "Suspense"], 110),
-  new Serie(4, "Corações em Segredo", ["Romance", "Drama"], 40, 3),
-  new Filme(5, "Corrida Contra o Tempo", ["Ação", "Suspense"], 105),
+  new Filme(1, "Operação Fênix", ["Ação", "Aventura"], 118),
+  new Serie(2, "Trapaça em Alto Astral", ["Ação", "Comédia", "Aventura"], 42, 2),
+  new Filme(3, "Corações em Rota", ["Comédia", "Romance"], 96),
+  new Serie(4, "Trilha Perdida", ["Aventura", "Drama"], 48, 2),
+  new Serie(5, "Sombra na Névoa", ["Ação", "Terror", "Suspense"], 44, 3),
+  new Filme(6, "Silêncio na Mansão", ["Terror", "Suspense"], 109),
 ];
 
 // ===================== RF13 — Closure =====================
