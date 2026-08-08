@@ -60,3 +60,27 @@ const catalogo = [
     duracaoMinutos: 105,
   },
 ];
+
+// ===================== RF03 / RF04 / RF05 — Compatibilidade =====================
+
+function classificarCompatibilidade(percentual) {
+  if (percentual >= 80) {
+    return "Alta afinidade";
+  } else if (percentual >= 50) {
+    return "Média afinidade";
+  } else {
+    return "Baixa afinidade";
+  }
+}
+
+function calcularCompatibilidade(usuario, conteudo) {
+  const generosUsuarioLower = new Set(usuario.generosFavoritos.map((g) => g.toLowerCase()));
+
+  const generosComuns = conteudo.generos.filter((g) => generosUsuarioLower.has(g.toLowerCase()));
+  const generosNaoExplorados = conteudo.generos.filter((g) => !generosComuns.includes(g));
+  const percentual = Math.round((generosComuns.length / conteudo.generos.length) * 100);
+  const classificacao = classificarCompatibilidade(percentual);
+  const gostaDeTodosOsGeneros = conteudo.generos.every((g) => generosUsuarioLower.has(g.toLowerCase()));
+
+  return { conteudo, percentual, generosComuns, generosNaoExplorados, classificacao, gostaDeTodosOsGeneros };
+}
