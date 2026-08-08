@@ -84,3 +84,91 @@ function calcularCompatibilidade(usuario, conteudo) {
 
   return { conteudo, percentual, generosComuns, generosNaoExplorados, classificacao, gostaDeTodosOsGeneros };
 }
+
+function obterMelhorCompatibilidade(usuario, catalogo) {
+  const resultados = catalogo.map((conteudo) => calcularCompatibilidade(usuario, conteudo));
+
+  return resultados.reduce((maisCompativel, atual) =>
+    atual.percentual > maisCompativel.percentual ? atual : maisCompativel
+  );
+}
+
+function buscarConteudoPorTitulo(catalogo, titulo) {
+  return catalogo.find((conteudo) => conteudo.titulo.toLowerCase() === titulo.toLowerCase());
+}
+
+// ===================== Funções de exibição =====================
+
+function exibirPerfil(usuario) {
+  console.log("\n----- Seu perfil -----");
+  console.log(`Nome: ${usuario.nome}`);
+  console.log(`Idade: ${usuario.idade}`);
+  console.log(`Gêneros favoritos: ${usuario.generosFavoritos.join(", ")}`);
+}
+
+function exibirCatalogo(catalogo) {
+  console.log("\n----- Catálogo completo -----");
+  for (const conteudo of catalogo) {
+    console.log(`- ${conteudo.titulo} (${conteudo.tipo}) — ${conteudo.duracaoMinutos} min`);
+  }
+}
+
+// RF03 / RF04 / RF05 / RF08 (map, filter)
+function calcularCompatibilidades(usuario, catalogo) {
+  const resultados = catalogo.map((conteudo) => calcularCompatibilidade(usuario, conteudo));
+
+  console.log("\n----- Compatibilidade com o catálogo -----");
+  resultados.forEach((resultado) => {
+    console.log(`\nTítulo: ${resultado.conteudo.titulo}`);
+    console.log(`Tipo: ${resultado.conteudo.tipo}`);
+    console.log(`Compatibilidade: ${resultado.percentual}%`);
+    console.log(
+      `Gêneros em comum: ${
+        resultado.generosComuns.length > 0 ? resultado.generosComuns.join(", ") : "nenhum"
+      }`
+    );
+    console.log(`Classificação: ${resultado.classificacao}`);
+
+    if (resultado.generosNaoExplorados.length > 0) {
+      console.log(`Para "${resultado.conteudo.titulo}", você ainda não explorou:`);
+      resultado.generosNaoExplorados.forEach((genero) => console.log(`- ${genero}`));
+    } else {
+      console.log(`Você já curte todos os gêneros de "${resultado.conteudo.titulo}"!`);
+    }
+  });
+
+  const altaAfinidade = resultados.filter((r) => r.classificacao === "Alta afinidade");
+  console.log(`\nVocê tem ${altaAfinidade.length} conteúdo(s) com alta afinidade no catálogo.`);
+
+  return resultados;
+}
+
+// RF06 (reduce)
+function exibirRecomendacaoPrincipal(usuario, catalogo) {
+  const melhor = obterMelhorCompatibilidade(usuario, catalogo);
+
+  console.log("\n----- Recomendação principal -----");
+  console.log(`${melhor.conteudo.titulo} (${melhor.conteudo.tipo})`);
+  console.log(`Compatibilidade: ${melhor.percentual}%`);
+}
+
+// RF07
+function exibirRecomendacaoPersonalizada(usuario, catalogo) {
+  const melhor = obterMelhorCompatibilidade(usuario, catalogo);
+
+  console.log(`\nRecomendação personalizada para ${usuario.nome}:`);
+
+  if (melhor.generosComuns.length > 0 && melhor.generosNaoExplorados.length > 0) {
+    console.log(
+      `Você já curte ${melhor.generosComuns.join(", ")} — que tal arriscar um pouco de ${melhor.generosNaoExplorados.join(", ")}?`
+    );
+  } else if (melhor.generosNaoExplorados.length === 0) {
+    console.log(`Você já curte todos os gêneros de "${melhor.conteudo.titulo}"!`);
+  } else {
+    console.log(
+      `"${melhor.conteudo.titulo}" tem gêneros bem diferentes do que você costuma assistir — pode ser uma boa surpresa!`
+    );
+  }
+
+  console.log(`"${melhor.conteudo.titulo}" pode ser um ótimo próximo título.`);
+}
