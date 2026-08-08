@@ -1,5 +1,43 @@
 const prompt = require("prompt-sync")({ sigint: true });
 
+// ===================== RF09 / RF10 — Classes e herança =====================
+
+class Conteudo {
+  constructor(id, titulo, tipo, generos, duracaoMinutos) {
+    this.id = id;
+    this.titulo = titulo;
+    this.tipo = tipo;
+    this.generos = generos;
+    this.duracaoMinutos = duracaoMinutos;
+  }
+
+  // RF11 — uso do this
+  exibirResumo() {
+    return `${this.titulo} (${this.tipo}) — ${this.duracaoMinutos} min — Gêneros: ${this.generos.join(", ")}`;
+  }
+}
+
+class Filme extends Conteudo {
+  constructor(id, titulo, generos, duracaoMinutos) {
+    super(id, titulo, "Filme", generos, duracaoMinutos);
+  }
+}
+
+class Serie extends Conteudo {
+  constructor(id, titulo, generos, duracaoMinutos, temporadas) {
+    super(id, titulo, "Série", generos, duracaoMinutos);
+    this.temporadas = temporadas;
+  }
+
+  exibirTemporadas() {
+    return `${this.titulo} tem ${this.temporadas} temporada${this.temporadas > 1 ? "s" : ""}`;
+  }
+
+  exibirResumo() {
+    return `${super.exibirResumo()} — ${this.temporadas} temporada(s)`;
+  }
+}
+
 // ===================== RF01 — Perfil da pessoa usuária =====================
 
 function coletarPerfil() {
@@ -22,43 +60,11 @@ function coletarPerfil() {
 // ===================== RF02 — Catálogo de conteúdos =====================
 
 const catalogo = [
-  {
-    id: 1,
-    titulo: "Fronteira Digital",
-    tipo: "Série",
-    generos: ["Ação", "Ficção Científica"],
-    duracaoMinutos: 45,
-    temporadas: 2,
-  },
-  {
-    id: 2,
-    titulo: "Risadas de Sábado",
-    tipo: "Filme",
-    generos: ["Comédia", "Romance"],
-    duracaoMinutos: 98,
-  },
-  {
-    id: 3,
-    titulo: "Sombras do Porão",
-    tipo: "Filme",
-    generos: ["Terror", "Suspense"],
-    duracaoMinutos: 110,
-  },
-  {
-    id: 4,
-    titulo: "Corações em Segredo",
-    tipo: "Série",
-    generos: ["Romance", "Drama"],
-    duracaoMinutos: 40,
-    temporadas: 3,
-  },
-  {
-    id: 5,
-    titulo: "Corrida Contra o Tempo",
-    tipo: "Filme",
-    generos: ["Ação", "Suspense"],
-    duracaoMinutos: 105,
-  },
+  new Serie(1, "Fronteira Digital", ["Ação", "Ficção Científica"], 45, 2),
+  new Filme(2, "Risadas de Sábado", ["Comédia", "Romance"], 98),
+  new Filme(3, "Sombras do Porão", ["Terror", "Suspense"], 110),
+  new Serie(4, "Corações em Segredo", ["Romance", "Drama"], 40, 3),
+  new Filme(5, "Corrida Contra o Tempo", ["Ação", "Suspense"], 105),
 ];
 
 // ===================== RF03 / RF04 / RF05 — Compatibilidade =====================
@@ -109,7 +115,7 @@ function exibirPerfil(usuario) {
 function exibirCatalogo(catalogo) {
   console.log("\n----- Catálogo completo -----");
   for (const conteudo of catalogo) {
-    console.log(`- ${conteudo.titulo} (${conteudo.tipo}) — ${conteudo.duracaoMinutos} min`);
+    console.log(`- ${conteudo.exibirResumo()}`);
   }
 }
 
@@ -148,7 +154,7 @@ function exibirRecomendacaoPrincipal(usuario, catalogo) {
   const melhor = obterMelhorCompatibilidade(usuario, catalogo);
 
   console.log("\n----- Recomendação principal -----");
-  console.log(`${melhor.conteudo.titulo} (${melhor.conteudo.tipo})`);
+  console.log(melhor.conteudo.exibirResumo());
   console.log(`Compatibilidade: ${melhor.percentual}%`);
 }
 
