@@ -92,14 +92,22 @@ function classificarCompatibilidade(percentual) {
   }
 }
 
-function calcularCompatibilidade(usuario, conteudo) {
-  const generosUsuarioLower = new Set(usuario.generosFavoritos.map((g) => g.toLowerCase()));
+// remove acentos antes de comparar, já que nem sempre o terminal permite digitar "ç"/"ã" etc.
+function normalizarTexto(texto) {
+  return texto
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
 
-  const generosComuns = conteudo.generos.filter((g) => generosUsuarioLower.has(g.toLowerCase()));
+function calcularCompatibilidade(usuario, conteudo) {
+  const generosUsuarioLower = new Set(usuario.generosFavoritos.map((g) => normalizarTexto(g)));
+
+  const generosComuns = conteudo.generos.filter((g) => generosUsuarioLower.has(normalizarTexto(g)));
   const generosNaoExplorados = conteudo.generos.filter((g) => !generosComuns.includes(g));
   const percentual = Math.round((generosComuns.length / conteudo.generos.length) * 100);
   const classificacao = classificarCompatibilidade(percentual);
-  const gostaDeTodosOsGeneros = conteudo.generos.every((g) => generosUsuarioLower.has(g.toLowerCase()));
+  const gostaDeTodosOsGeneros = conteudo.generos.every((g) => generosUsuarioLower.has(normalizarTexto(g)));
 
   return { conteudo, percentual, generosComuns, generosNaoExplorados, classificacao, gostaDeTodosOsGeneros };
 }
@@ -113,7 +121,7 @@ function obterMelhorCompatibilidade(usuario, catalogo) {
 }
 
 function buscarConteudoPorTitulo(catalogo, titulo) {
-  return catalogo.find((conteudo) => conteudo.titulo.toLowerCase() === titulo.toLowerCase());
+  return catalogo.find((conteudo) => normalizarTexto(conteudo.titulo) === normalizarTexto(titulo));
 }
 
 // ===================== RF14 — Promise / async-await =====================
