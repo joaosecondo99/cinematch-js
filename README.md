@@ -145,13 +145,18 @@ O projeto segue um GitFlow simplificado:
 
 ## Kanban
 
-O quadro de tarefas está em [`planejamento/tarefas-kanban.md`](planejamento/tarefas-kanban.md).
+O quadro de tarefas está em [`planejamento/tarefas-kanban.md`](planejamento/tarefas-kanban.md) e também no Trello.
 
-> Link do quadro Kanban: _[adicionar link aqui]_
+> Link do quadro Kanban (Trello): https://trello.com/b/zgs9Bwdl
 
 ## Vídeo de demonstração
 
 > Link do vídeo (até 5 minutos): _[adicionar link aqui]_
+
+## Links
+
+- Repositório: https://github.com/joaosecondo99/cinematch-js
+- Quadro Kanban (Trello): https://trello.com/b/zgs9Bwdl
 
 ## Autor
 
