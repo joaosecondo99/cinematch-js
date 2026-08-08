@@ -67,6 +67,19 @@ const catalogo = [
   new Filme(5, "Corrida Contra o Tempo", ["Ação", "Suspense"], 105),
 ];
 
+// ===================== RF13 — Closure =====================
+
+function criarContadorDeRecomendacoes() {
+  let total = 0;
+
+  return function () {
+    total++;
+    return total;
+  };
+}
+
+const contarAnalise = criarContadorDeRecomendacoes();
+
 // ===================== RF03 / RF04 / RF05 — Compatibilidade =====================
 
 function classificarCompatibilidade(percentual) {
@@ -101,6 +114,27 @@ function obterMelhorCompatibilidade(usuario, catalogo) {
 
 function buscarConteudoPorTitulo(catalogo, titulo) {
   return catalogo.find((conteudo) => conteudo.titulo.toLowerCase() === titulo.toLowerCase());
+}
+
+// ===================== RF14 — Promise / async-await =====================
+
+function buscarCatalogoSimulado() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(catalogo);
+    }, 1000);
+  });
+}
+
+// ===================== RF12 — Callback =====================
+
+function finalizarOnboarding(nomeUsuario, callback) {
+  console.log("\nOnboarding finalizado.");
+  callback(nomeUsuario);
+}
+
+function exibirMensagemFinal(nome) {
+  console.log(`${nome}, aproveite sua maratona! Bom streaming.`);
 }
 
 // ===================== Funções de exibição =====================
@@ -145,6 +179,7 @@ function calcularCompatibilidades(usuario, catalogo) {
 
   const altaAfinidade = resultados.filter((r) => r.classificacao === "Alta afinidade");
   console.log(`\nVocê tem ${altaAfinidade.length} conteúdo(s) com alta afinidade no catálogo.`);
+  console.log(`Esta é a sua análise número ${contarAnalise()}.`);
 
   return resultados;
 }
@@ -156,6 +191,7 @@ function exibirRecomendacaoPrincipal(usuario, catalogo) {
   console.log("\n----- Recomendação principal -----");
   console.log(melhor.conteudo.exibirResumo());
   console.log(`Compatibilidade: ${melhor.percentual}%`);
+  console.log(`Esta é a sua análise número ${contarAnalise()}.`);
 }
 
 // RF07
@@ -177,4 +213,71 @@ function exibirRecomendacaoPersonalizada(usuario, catalogo) {
   }
 
   console.log(`"${melhor.conteudo.titulo}" pode ser um ótimo próximo título.`);
+  console.log(`Esta é a sua análise número ${contarAnalise()}.`);
 }
+
+// ===================== RF15 — Menu interativo =====================
+
+function exibirMenu(usuario, catalogo) {
+  let opcao;
+
+  do {
+    console.log("\n===== CineMatch JS =====");
+    console.log("1 - Ver meu perfil");
+    console.log("2 - Ver catálogo completo");
+    console.log("3 - Calcular compatibilidade com todos os conteúdos");
+    console.log("4 - Ver o conteúdo mais recomendado");
+    console.log("5 - Ver recomendação personalizada");
+    console.log("6 - Buscar um conteúdo pelo título");
+    console.log("7 - Sair");
+
+    opcao = prompt("Escolha uma opção: ");
+
+    switch (opcao) {
+      case "1":
+        exibirPerfil(usuario);
+        break;
+      case "2":
+        exibirCatalogo(catalogo);
+        break;
+      case "3":
+        calcularCompatibilidades(usuario, catalogo);
+        break;
+      case "4":
+        exibirRecomendacaoPrincipal(usuario, catalogo);
+        break;
+      case "5":
+        exibirRecomendacaoPersonalizada(usuario, catalogo);
+        break;
+      case "6": {
+        const tituloBusca = prompt("Digite o título do conteúdo que deseja buscar: ");
+        const encontrado = buscarConteudoPorTitulo(catalogo, tituloBusca);
+        encontrado
+          ? console.log(`\nEncontrado: ${encontrado.exibirResumo()}`)
+          : console.log("\nNenhum conteúdo encontrado com esse título.");
+        break;
+      }
+      case "7":
+        console.log("\nAté a próxima maratona!");
+        break;
+      default:
+        console.log("\nOpção inválida, tente novamente.");
+    }
+  } while (opcao !== "7");
+}
+
+// ===================== Fluxo principal =====================
+
+async function iniciarSistema() {
+  const usuario = coletarPerfil();
+
+  console.log("\nCarregando catálogo...");
+  const catalogoCarregado = await buscarCatalogoSimulado();
+  console.log("Catálogo carregado com sucesso!");
+
+  finalizarOnboarding(usuario.nome, exibirMensagemFinal);
+
+  exibirMenu(usuario, catalogoCarregado);
+}
+
+iniciarSistema();
