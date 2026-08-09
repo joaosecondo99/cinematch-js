@@ -121,10 +121,6 @@ function obterMelhorCompatibilidade(usuario, catalogo) {
   );
 }
 
-function buscarConteudoPorTitulo(catalogo, titulo) {
-  return catalogo.find((conteudo) => normalizarTexto(conteudo.titulo) === normalizarTexto(titulo));
-}
-
 // ===================== RF14 — Promise / async-await =====================
 
 function buscarCatalogoSimulado() {
@@ -162,7 +158,7 @@ function exibirCatalogo(catalogo) {
   }
 }
 
-// RF03 / RF04 / RF05 / RF08 (map, filter)
+// RF03 / RF04 / RF05 / RF08 (map, filter, find)
 function calcularCompatibilidades(usuario, catalogo) {
   const resultados = catalogo.map((conteudo) => calcularCompatibilidade(usuario, conteudo));
 
@@ -188,6 +184,12 @@ function calcularCompatibilidades(usuario, catalogo) {
 
   const altaAfinidade = resultados.filter((r) => r.classificacao === "Alta afinidade");
   console.log(`\nVocê tem ${altaAfinidade.length} conteúdo(s) com alta afinidade no catálogo.`);
+
+  const primeiraAltaAfinidade = resultados.find((r) => r.classificacao === "Alta afinidade");
+  if (primeiraAltaAfinidade) {
+    console.log(`O primeiro conteúdo de alta afinidade que encontrei foi "${primeiraAltaAfinidade.conteudo.titulo}".`);
+  }
+
   console.log(`Esta é a sua análise número ${contarAnalise()}.`);
 
   return resultados;
@@ -236,9 +238,7 @@ function exibirMenu(usuario, catalogo) {
     console.log("2 - Ver catálogo completo");
     console.log("3 - Calcular compatibilidade com todos os conteúdos");
     console.log("4 - Ver o conteúdo mais recomendado");
-    console.log("5 - Ver recomendação personalizada");
-    console.log("6 - Buscar um conteúdo pelo título");
-    console.log("7 - Sair");
+    console.log("5 - Sair");
 
     opcao = prompt("Escolha uma opção: ");
 
@@ -254,25 +254,15 @@ function exibirMenu(usuario, catalogo) {
         break;
       case "4":
         exibirRecomendacaoPrincipal(usuario, catalogo);
-        break;
-      case "5":
         exibirRecomendacaoPersonalizada(usuario, catalogo);
         break;
-      case "6": {
-        const tituloBusca = prompt("Digite o título do conteúdo que deseja buscar: ");
-        const encontrado = buscarConteudoPorTitulo(catalogo, tituloBusca);
-        encontrado
-          ? console.log(`\nEncontrado: ${encontrado.exibirResumo()}`)
-          : console.log("\nNenhum conteúdo encontrado com esse título.");
-        break;
-      }
-      case "7":
+      case "5":
         console.log("\nAté a próxima maratona!");
         break;
       default:
         console.log("\nOpção inválida, tente novamente.");
     }
-  } while (opcao !== "7");
+  } while (opcao !== "5");
 }
 
 // ===================== Fluxo principal =====================
