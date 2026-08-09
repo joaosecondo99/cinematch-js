@@ -39,12 +39,11 @@ cortar a espera do `npm install` se já estiver instalado).
 3. No menu, escolher a opção **3** (calcular compatibilidade com todos os
    conteúdos) e comentar o resultado: percentual, gêneros em comum, gêneros
    não explorados e a classificação (Alta/Média/Baixa afinidade).
-4. Escolher a opção **4** (conteúdo mais recomendado) e depois a **5**
-   (recomendação personalizada), mostrando a mensagem sugerindo o próximo
-   gênero a explorar.
-5. Opcional, se sobrar tempo: opção **6** (buscar por título) e opção **1**
-   (ver perfil).
-6. Sair com a opção **7**.
+4. Escolher a opção **4** (conteúdo mais recomendado) — ela já mostra junto a
+   recomendação personalizada, sugerindo o próximo gênero a explorar.
+5. Opcional, se sobrar tempo: opção **1** (ver perfil) de novo, ou opção **2**
+   (catálogo completo).
+6. Sair com a opção **5**.
 
 > "Reparem que a cada análise ele conta quantas vezes eu já pedi uma
 > recomendação nessa sessão — isso é uma closure guardando esse número na
