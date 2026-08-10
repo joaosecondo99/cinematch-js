@@ -149,10 +149,6 @@ O quadro de tarefas está em [`planejamento/tarefas-kanban.md`](planejamento/tar
 
 > Link do quadro Kanban (Trello): https://trello.com/b/zgs9Bwdl
 
-## Vídeo de demonstração
-
-> Link do vídeo (até 5 minutos): _[adicionar link aqui]_
-
 ## Links
 
 - Repositório: https://github.com/joaosecondo99/cinematch-js
